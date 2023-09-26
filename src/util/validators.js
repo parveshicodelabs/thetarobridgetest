@@ -110,6 +110,10 @@ export const emailFormatValid = message => value => {
   return value && EMAIL_RE.test(value) ? VALID : message;
 };
 
+export const confirmEmailValid = ({ email, message }) => value => {
+  return (value !== undefined) && (email?.trim() === value?.trim()) ? VALID : message
+}
+
 export const moneySubUnitAmountAtLeast = (message, minValue) => value => {
   return value instanceof Money && value.amount >= minValue ? VALID : message;
 };
@@ -227,6 +231,9 @@ export const validHKID = message => value => {
 export const validSGID = message => value => {
   return value.length === 9 ? VALID : message;
 };
+
+
+
 
 export const composeValidators = (...validators) => value =>
   validators.reduce((error, validator) => error || validator(value), VALID);

@@ -1,0 +1,18 @@
+version: "3"
+services:
+  tarobridge:
+    env_file: staging.env
+    build:
+      context: .
+      args:
+        - ENVFILE
+      dockerfile: Dockerfile
+    container_name: tarobridge
+    image: tarobridge
+    restart: always
+    ports:
+    - "2600:2600"
+    volumes:
+    - /var/www/html/tarobridge
+    - /var/www/html/tarobridge/node_modules
+    - /var/logs/error.log:/var/log/tarobridge/error.log

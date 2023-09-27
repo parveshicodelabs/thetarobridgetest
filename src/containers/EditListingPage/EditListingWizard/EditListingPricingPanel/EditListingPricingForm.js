@@ -60,14 +60,20 @@ export const EditListingPricingFormComponent = props => (
         updated,
         updateInProgress,
         fetchErrors,
+        categories,
+        initialValues
       } = formRenderProps;
 
+      console.log(initialValues, '&& initial values! &&');
+      // console.log(categories, '&& categories &&');
+      
       const priceValidators = getPriceValidators(
         listingMinimumPriceSubUnits,
         marketplaceCurrency,
         intl
       );
 
+      
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
@@ -86,20 +92,19 @@ export const EditListingPricingFormComponent = props => (
               <FormattedMessage id="EditListingPricingForm.showListingFailed" />
             </p>
           ) : null}
-          <FieldCurrencyInput
-            id={`${formId}price`}
-            name="price"
-            className={css.input}
-            autoFocus={autoFocus}
-            label={intl.formatMessage(
-              { id: 'EditListingPricingForm.pricePerProduct' },
-              { unitType }
-            )}
-            placeholder={intl.formatMessage({ id: 'EditListingPricingForm.priceInputPlaceholder' })}
-            currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
-            validate={priceValidators}
-          />
+          {categories.map(category => {
+            return <FieldCurrencyInput
+              id={`${category}-price`}
+              name={`${category}`}
+              className={css.input}
+              autoFocus={autoFocus}
+              label={`${category} Price`.toLocaleUpperCase()}
+              placeholder={intl.formatMessage({ id: 'EditListingPricingForm.priceInputPlaceholder' })}
+              currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
+              validate={priceValidators}
+            />
 
+          })}
           <Button
             className={css.submitButton}
             type="submit"

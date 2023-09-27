@@ -145,11 +145,11 @@ const TopbarDesktop = props => {
         alt={intl.formatMessage({ id: 'TopbarDesktop.logo' }, { marketplaceName })}
       />
       {search}
-      {/* <NamedLink className={css.createListingLink} name="NewListingPage">
+      <NamedLink className={css.createListingLink} name="NewListingPage">
         <span className={css.createListing}>
           <FormattedMessage id="TopbarDesktop.createListing" />
         </span>
-      </NamedLink> */}
+      </NamedLink>
       {inboxLink}
       {profileMenu}
       {signupLink}

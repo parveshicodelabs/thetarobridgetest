@@ -179,11 +179,11 @@ const tabCompleted = (tab, listing, config) => {
     availabilityPlan,
     description,
     geolocation,
-    price,
     title,
     publicData,
     privateData,
   } = listing.attributes;
+  const {prices} = listing.attributes.publicData
   const images = listing.images;
   const { listingType, transactionProcessAlias, unitType, shippingEnabled, pickupEnabled } =
     publicData || {};
@@ -200,9 +200,9 @@ const tabCompleted = (tab, listing, config) => {
         hasValidListingFieldsInExtendedData(publicData, privateData, config)
       );
     case PRICING:
-      return !!price;
+      return prices && prices.length > 0;
     case PRICING_AND_STOCK:
-      return !!price;
+      return prices && prices.length > 0;
     case DELIVERY:
       return !!deliveryOptionPicked;
     case LOCATION:
@@ -724,6 +724,7 @@ const EnhancedEditListingWizard = props => {
   const config = useConfiguration();
   const routeConfiguration = useRouteConfiguration();
   const intl = useIntl();
+  
   return (
     <EditListingWizard
       config={config}

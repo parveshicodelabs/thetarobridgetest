@@ -18,10 +18,18 @@ const { Money } = sdkTypes;
 
 const getInitialValues = params => {
   const { listing } = params;
-  const { price } = listing?.attributes || {};
+  
+  const { prices = []} = listing?.attributes?.publicData;
+  const initialValues = {}
 
-  return { price };
+ prices.forEach(price => {
+  const {amount, currency, service} = price
+  initialValues[service]  = new Money(amount, currency)
+ });
+
+return initialValues;
 };
+
 
 const EditListingPricingPanel = props => {
   const {
@@ -42,11 +50,10 @@ const EditListingPricingPanel = props => {
   const classes = classNames(rootClassName || css.root, className);
   const initialValues = getInitialValues(props);
   const isPublished = listing?.id && listing?.attributes?.state !== LISTING_STATE_DRAFT;
-  const priceCurrencyValid =
-    initialValues.price instanceof Money
-      ? initialValues.price.currency === marketplaceCurrency
-      : true;
+
   const unitType = listing?.attributes?.publicData?.unitType;
+
+  const categories = listing?.attributes.publicData?.category || [];
 
   return (
     <div className={classes}>
@@ -63,17 +70,20 @@ const EditListingPricingPanel = props => {
           />
         )}
       </H3>
-      {priceCurrencyValid ? (
+      
         <EditListingPricingForm
           className={css.form}
           initialValues={initialValues}
           onSubmit={values => {
-            const { price } = values;
-
-            // New values for listing attributes
+            const prices = categories.map(c => {
+              return {amount:values[c].amount, currency:values[c].currency, service: c}
+            })
             const updateValues = {
-              price,
+              publicData:{
+                prices
+              },
             };
+            console.log(updateValues, 'update values!~!')
             onSubmit(updateValues);
           }}
           marketplaceCurrency={marketplaceCurrency}
@@ -85,12 +95,9 @@ const EditListingPricingPanel = props => {
           updated={panelUpdated}
           updateInProgress={updateInProgress}
           fetchErrors={errors}
+          categories={categories}
         />
-      ) : (
-        <div className={css.priceCurrencyInvalid}>
-          <FormattedMessage id="EditListingPricingPanel.listingPriceCurrencyInvalid" />
-        </div>
-      )}
+     
     </div>
   );
 };

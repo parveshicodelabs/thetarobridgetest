@@ -232,6 +232,7 @@ const EditListingDetailsPanel = props => {
   const listingFieldsConfig = config.listing.customListingFields;
   const servicesListingField = listingFieldsConfig.filter(f => f.key === 'services')[0]
 
+  console.log(config.listing, '&& listing fields config &&')
 
   const { hasExistingListingType, existingListingTypeInfo } = hasSetListingType(publicData);
   const hasValidExistingListingType =

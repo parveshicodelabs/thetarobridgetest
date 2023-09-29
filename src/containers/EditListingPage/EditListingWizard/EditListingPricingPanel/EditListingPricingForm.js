@@ -60,12 +60,10 @@ export const EditListingPricingFormComponent = props => (
         updated,
         updateInProgress,
         fetchErrors,
-        categories,
-        initialValues
+        services
       } = formRenderProps;
 
-      console.log(initialValues, '&& initial values! &&');
-      // console.log(categories, '&& categories &&');
+
       
       const priceValidators = getPriceValidators(
         listingMinimumPriceSubUnits,
@@ -92,13 +90,15 @@ export const EditListingPricingFormComponent = props => (
               <FormattedMessage id="EditListingPricingForm.showListingFailed" />
             </p>
           ) : null}
-          {categories.map(category => {
+          {services.map(service => {
+            const label = `${service.split('_')[0]} Price`.toLocaleUpperCase()
             return <FieldCurrencyInput
-              id={`${category}-price`}
-              name={`${category}`}
+              key={`${service}-price`}
+              id={`${service}-price`}
+              name={`${service}`}
               className={css.input}
               autoFocus={autoFocus}
-              label={`${category} Price`.toLocaleUpperCase()}
+              label={label}
               placeholder={intl.formatMessage({ id: 'EditListingPricingForm.priceInputPlaceholder' })}
               currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
               validate={priceValidators}

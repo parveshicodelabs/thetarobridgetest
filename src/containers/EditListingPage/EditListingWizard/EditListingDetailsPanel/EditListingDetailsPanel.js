@@ -124,8 +124,11 @@ const initialValuesForListingFields = (
   targetListingType,
   listingFieldConfigs
 ) => {
+
+ 
   return listingFieldConfigs.reduce((fields, field) => {
     const { key, includeForListingTypes, scope = 'public', schemaType } = field || {};
+  
     const namespacePrefix = scope === 'public' ? `pub_` : `priv_`;
     const namespacedKey = `${namespacePrefix}${key}`;
 
@@ -133,11 +136,11 @@ const initialValuesForListingFields = (
     const isTargetScope = scope === targetScope;
     const isTargetListingType =
       includeForListingTypes == null || includeForListingTypes.includes(targetListingType);
-
     if (isKnownSchemaType && isTargetScope && isTargetListingType) {
       const fieldValue = data[key] || null;
       return { ...fields, [namespacedKey]: fieldValue };
     }
+   
     return fields;
   }, {});
 };
@@ -184,7 +187,16 @@ const setNoAvailabilityForUnbookableListings = processAlias => {
  */
 const getInitialValues = (props, existingListingTypeInfo, listingTypes, listingFieldsConfig) => {
   const { description, title, publicData, privateData } = props?.listing?.attributes || {};
-  const { listingType } = publicData;
+  const { listingType , services = []} = publicData;
+
+  //As some services might be mandatory we have to pass them in initial value
+  let updatedServices  = services.map(s => s.title);
+  if(!services.length){
+      let serviceFiled = listingFieldsConfig.filter(f => f.key === 'services')[0];
+      const {enumOptions = []} = serviceFiled;
+   let mandatoryServices = enumOptions.filter(s => s.mandatory === true).map(ms=>ms.option);
+   updatedServices = mandatoryServices
+  }
 
   // Initial values for the form
   return {
@@ -194,6 +206,7 @@ const getInitialValues = (props, existingListingTypeInfo, listingTypes, listingF
     ...getTransactionInfo(listingTypes, existingListingTypeInfo),
     ...initialValuesForListingFields(publicData, 'public', listingType, listingFieldsConfig),
     ...initialValuesForListingFields(privateData, 'private', listingType, listingFieldsConfig),
+    ['pub_services']: [...updatedServices],
   };
 };
 
@@ -216,7 +229,9 @@ const EditListingDetailsPanel = props => {
   const classes = classNames(rootClassName || css.root, className);
   const { publicData, state } = listing?.attributes || {};
   const listingTypes = config.listing.listingTypes;
-  const listingFieldsConfig = config.listing.listingFields;
+  const listingFieldsConfig = config.listing.customListingFields;
+  const servicesListingField = listingFieldsConfig.filter(f => f.key === 'services')[0]
+
 
   const { hasExistingListingType, existingListingTypeInfo } = hasSetListingType(publicData);
   const hasValidExistingListingType =
@@ -233,7 +248,6 @@ const EditListingDetailsPanel = props => {
     listingTypes,
     listingFieldsConfig
   );
-
   const noListingTypesSet = listingTypes?.length === 0;
   const hasListingTypesSet = listingTypes?.length > 0;
   const canShowEditListingDetailsForm =
@@ -268,8 +282,17 @@ const EditListingDetailsPanel = props => {
               listingType,
               transactionProcessAlias,
               unitType,
+              pub_services,
               ...rest
             } = values;
+         
+          //need to store pub services in as an array of object
+           const {enumOptions = []} = servicesListingField;
+
+           const selectedServices = pub_services.map( s => {
+              const {option, validity, description} =  enumOptions.filter(o => o.option === s)[0] || {};
+              return {title:option, validity, description}
+           })
 
             // New values for listing attributes
             const updateValues = {
@@ -280,6 +303,7 @@ const EditListingDetailsPanel = props => {
                 transactionProcessAlias,
                 unitType,
                 ...pickListingFieldsData(rest, 'public', listingType, listingFieldsConfig),
+                services:[...selectedServices],
               },
               privateData: pickListingFieldsData(rest, 'private', listingType, listingFieldsConfig),
               ...setNoAvailabilityForUnbookableListings(transactionProcessAlias),

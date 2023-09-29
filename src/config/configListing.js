@@ -46,6 +46,78 @@
  *   - isRequired (optional):         Is the field required for providers to fill
  *   - requiredMessage (optional):    Message for those fields, which are mandatory.
  */
+
+
+export const customListingFields = [
+  {
+    key: 'services',
+    scope: 'public',
+    schemaType: 'multi-enum',
+    enumOptions: [
+      {
+        option: 'Personalized 3-Minute Video Reading: 24 Hours Delivery',
+        label:'Personalized 3-Minute Video Reading: 24 Hours Delivery',
+        validity: 3, //in min,
+        description:`Submit your question. I'll send you a 3 minute video with clarity`,
+        mandatory:true
+      },{
+        option: 'Personalized 10-Minute Video Reading:24 Hours Delivery',
+        label:'Personalized 10-Minute Video Reading: 24 Hours Delivery',
+        validity: 10, //in min,
+        description:`Submit your question. I'll send you a 3 minute video with clarity`,
+        mandatory:true
+      },{
+        option: 'Live 1-1 Video Call: 15-Minute',
+        label:'Live 1-1 Video Call: 15-Minute',
+        description:`Schedule your live 1-1 reading inside my video room. I'll send you a link to enter on the other side`,
+        validity: 15, //in min,
+      },{
+        option: 'Live 1-1 Video Call: 30-Minute',
+        label:'Live 1-1 Video Call: 30-Minute',
+        description:`Schedule your live 1-1 reading inside my video room. I'll send you a link to enter on the other side`,
+        validity: 30, //in min,
+      },{
+        option: 'Live 1-1 Video Call: 45-Minute',
+        label:'Live 1-1 Video Call: 45-Minute',
+        description:`Schedule your live 1-1 reading inside my video room. I'll send you a link to enter on the other side`,
+        validity: 45, //in min,
+      },{
+        option: 'Live 1-1 Video Call: 1-Hour',
+        label:'Live 1-1 Video Call: 1-Hour',
+        description:`Schedule your live 1-1 reading inside my video room. I'll send you a link to enter on the other side`,
+        validity: 60, //in min,
+      },
+
+    ],
+    filterConfig: {
+      indexForSearch: true,
+      filterType: 'SelectMultipleFilter',
+      label: 'Services',
+      group: 'primary',
+      searchMode:'has_all'
+    },
+    showConfig: {
+      label: 'Services',
+      isDetail: true,
+    },
+    saveConfig: {
+      isRequired:true,
+      label: 'Services',
+      placeholderMessage: undefined,
+      requiredMessage:undefined,
+      isRequired: true,
+     schemaType:'multi-enum',
+     scope:'public'
+    },
+    includeForListingTypes:['daily-booking']
+  },
+  {
+    key:'Categories',
+    
+  }
+]
+
+
 export const listingFields = [
   {
     key: 'category',

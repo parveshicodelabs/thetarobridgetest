@@ -26,10 +26,28 @@ const FieldCheckboxRenderer = props => {
     fields,
     options,
     meta,
+    values,
+    shouldModify
   } = props;
+
 
   const classes = classNames(rootClassName || css.root, className);
   const listClasses = twoColumns ? classNames(css.list, css.twoColumns) : css.list;
+
+  const shouldBeChecked = (option) => {
+    //Should be checked if:
+    //1. option is selected
+    //2. option is in initial value
+    //3. option is mandatory
+    // if(initialValues.pub_services.includes(option.key) || values.pub_services.includes(option.key) || option.mandatory === true){
+    //   return true
+    // }
+
+    if(option.mandatory === true || values.pub_services?.includes(option.key)){
+      return true;
+    }
+     
+  }
 
   return (
     <fieldset className={classes}>
@@ -39,6 +57,13 @@ const FieldCheckboxRenderer = props => {
           const fieldId = `${id}.${option.key}`;
           const textClassName = optionLabelClassName;
           const textClassNameMaybe = textClassName ? { textClassName } : {};
+          let modificationProps   = {}
+          if(shouldModify){
+            const checked = shouldBeChecked(option);
+            const disabled = option.mandatory === true;
+            modificationProps = {checked,disabled}
+          }
+          
           return (
             <li key={fieldId} className={css.item}>
               <FieldCheckbox
@@ -46,6 +71,7 @@ const FieldCheckboxRenderer = props => {
                 name={fields.name}
                 label={option.label}
                 value={option.key}
+                {...modificationProps}
                 {...textClassNameMaybe}
               />
             </li>

@@ -53,7 +53,9 @@ const EditListingPricingPanel = props => {
 
   const unitType = listing?.attributes?.publicData?.unitType;
 
-  const categories = listing?.attributes.publicData?.category || [];
+  let services = listing?.attributes.publicData?.services || [];
+
+  services = services.map(s => s.title);
 
   return (
     <div className={classes}>
@@ -75,7 +77,7 @@ const EditListingPricingPanel = props => {
           className={css.form}
           initialValues={initialValues}
           onSubmit={values => {
-            const prices = categories.map(c => {
+            const prices = services.map(c => {
               return {amount:values[c].amount, currency:values[c].currency, service: c}
             })
             const updateValues = {
@@ -95,7 +97,7 @@ const EditListingPricingPanel = props => {
           updated={panelUpdated}
           updateInProgress={updateInProgress}
           fetchErrors={errors}
-          categories={categories}
+          services={services}
         />
      
     </div>

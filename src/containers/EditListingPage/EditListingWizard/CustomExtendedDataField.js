@@ -15,7 +15,7 @@ import { FieldCheckboxGroup, FieldSelect, FieldTextInput, FieldBoolean } from '.
 // Import modules from this directory
 import css from './EditListingWizard.module.css';
 
-const createFilterOptions = options => options.map(o => ({ key: `${o.option}`, label: o.label }));
+const createFilterOptions = options => options.map(o => ({ key: `${o.option}`, label: o.label, mandatory: o.mandatory || null }));
 
 const CustomFieldEnum = props => {
   const { name, fieldConfig, defaultRequiredMessage, intl } = props;
@@ -47,7 +47,7 @@ const CustomFieldEnum = props => {
 };
 
 const CustomFieldMultiEnum = props => {
-  const { name, fieldConfig, defaultRequiredMessage } = props;
+  const { name, fieldConfig, defaultRequiredMessage, initialValues, values, shouldModify } = props;
   const { enumOptions = [], saveConfig } = fieldConfig || {};
   const { label, isRequired, requiredMessage } = saveConfig || {};
   const validateMaybe = isRequired
@@ -61,7 +61,10 @@ const CustomFieldMultiEnum = props => {
       name={name}
       label={label}
       options={createFilterOptions(enumOptions)}
+      initialValues={initialValues}
+      values={values}
       {...validateMaybe}
+      shouldModify={shouldModify}
     />
   ) : null;
 };
@@ -149,7 +152,7 @@ const CustomFieldBoolean = props => {
 const CustomExtendedDataField = props => {
   const intl = useIntl();
   const { enumOptions = [], schemaType } = props?.fieldConfig || {};
-  const renderFieldComponent = (FieldComponent, props) => <FieldComponent {...props} intl={intl} />;
+  const renderFieldComponent = (FieldComponent, props) => <FieldComponent {...props} shouldModify={true} intl={intl} />;
 
   return schemaType === SCHEMA_TYPE_ENUM && enumOptions
     ? renderFieldComponent(CustomFieldEnum, props)

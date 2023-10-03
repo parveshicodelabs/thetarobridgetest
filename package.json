@@ -26,6 +26,8 @@
     "express-sitemap": "^1.8.0",
     "final-form": "^4.20.7",
     "final-form-arrays": "^3.0.2",
+    "firebase": "^10.4.0",
+    "firebase-admin": "^11.11.0",
     "full-icu": "^1.4.0",
     "helmet": "^6.0.1",
     "jose": "4.9.2",

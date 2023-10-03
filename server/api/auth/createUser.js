@@ -1,5 +1,4 @@
 const sharetribeSdk = require('sharetribe-flex-sdk');
-const { handleError } = require('../../api-util/sdk');
 
 const CLIENT_ID = process.env.REACT_APP_SHARETRIBE_SDK_CLIENT_ID;
 const BASE_URL = process.env.REACT_APP_SHARETRIBE_SDK_BASE_URL;

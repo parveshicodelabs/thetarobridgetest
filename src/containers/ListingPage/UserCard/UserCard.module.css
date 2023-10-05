@@ -5,7 +5,7 @@
 
 .content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .avatar {
@@ -96,6 +96,7 @@
 
 .links {
   margin-top: 13px;
+  display: flex;
 
   @media (--viewportMedium) {
     margin: 16px 0 0 0;
@@ -175,4 +176,17 @@
     font-weight: var(--fontWeightMedium);
     margin: 0;
   }
+}
+
+
+.responsiveImage {
+  display: block;
+  position: relative;
+  width: 300px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+.contactBtn{
+  margin-left:10px
 }

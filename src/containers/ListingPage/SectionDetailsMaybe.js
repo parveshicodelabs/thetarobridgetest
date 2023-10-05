@@ -11,6 +11,7 @@ const SectionDetailsMaybe = props => {
   if (!publicData || !listingConfig) {
     return null;
   }
+  
 
   const pickListingFields = (filteredConfigs, config) => {
     const { key, schemaType, enumOptions, showConfig = {} } = config;

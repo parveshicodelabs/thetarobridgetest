@@ -84,6 +84,11 @@
   }
 }
 
+.xLargeAvatar{
+  width: 100%;
+  height: 400px;
+}
+
 .initialsLarge {
   composes: h3 from global;
   padding: 0;

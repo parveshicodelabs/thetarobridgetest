@@ -237,7 +237,7 @@ export const showListing = (listingId, config, isOwn = false) => (dispatch, getS
 
   return show
     .then(data => {
-      const listingFields = config?.listing?.listingFields;
+      const listingFields = config?.listing?.customListingFields;
       const sanitizeConfig = { listingFields };
       dispatch(addMarketplaceEntities(data, sanitizeConfig));
       return data;

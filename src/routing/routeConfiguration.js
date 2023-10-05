@@ -22,6 +22,7 @@ const InboxPage = loadable(() => import(/* webpackChunkName: "InboxPage" */ '../
 const LandingPage = loadable(() => import(/* webpackChunkName: "LandingPage" */ '../containers/LandingPage/LandingPage'));
 const ListingPageCoverPhoto = loadable(() => import(/* webpackChunkName: "ListingPageCoverPhoto" */ /* webpackPrefetch: true */ '../containers/ListingPage/ListingPageCoverPhoto'));
 const ListingPageCarousel = loadable(() => import(/* webpackChunkName: "ListingPageCarousel" */ /* webpackPrefetch: true */ '../containers/ListingPage/ListingPageCarousel'));
+const ListingPageCustom = loadable(() => import(/* webpackChunkName: "ListingPageCustom" */ /* webpackPrefetch: true */ '../containers/ListingPage/ListingPageCustom'));
 const ManageListingsPage = loadable(() => import(/* webpackChunkName: "ManageListingsPage" */ '../containers/ManageListingsPage/ManageListingsPage'));
 const PasswordChangePage = loadable(() => import(/* webpackChunkName: "PasswordChangePage" */ '../containers/PasswordChangePage/PasswordChangePage'));
 const PasswordRecoveryPage = loadable(() => import(/* webpackChunkName: "PasswordRecoveryPage" */ '../containers/PasswordRecoveryPage/PasswordRecoveryPage'));
@@ -64,9 +65,10 @@ const routeConfiguration = (layoutConfig) => {
   const SearchPage = layoutConfig.searchPage?.variantType === 'map' 
     ? SearchPageWithMap 
     : SearchPageWithGrid;
-  const ListingPage = layoutConfig.listingPage?.variantType === 'carousel' 
-    ? ListingPageCarousel 
-    : ListingPageCoverPhoto;
+  // const ListingPage = layoutConfig.listingPage?.variantType === 'carousel' 
+  //   ? ListingPageCarousel 
+  //   : ListingPageCoverPhoto;
+  const ListingPage = ListingPageCustom;
   
   return [
     {

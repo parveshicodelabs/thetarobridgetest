@@ -7,7 +7,7 @@ import { FormattedMessage } from '../../../util/reactIntl';
 import { ensureUser, ensureCurrentUser } from '../../../util/data';
 import { propTypes } from '../../../util/types';
 
-import { AvatarLarge, NamedLink, InlineTextButton } from '../../../components';
+import { AvatarXLarge, NamedLink, InlineTextButton, ResponsiveImage, AspectRatioWrapper, PrimaryButton, SecondaryButton, Avatar, H4 } from '../../../components';
 
 import css from './UserCard.module.css';
 
@@ -79,17 +79,17 @@ const UserCard = props => {
     [css.withBioMissingAbove]: !hasBio,
   });
 
-  const separator =
-    isCurrentUser || !showContact ? null : <span className={css.linkSeparator}>•</span>;
+  // const separator =
+  //   isCurrentUser || !showContact ? null : <span className={css.linkSeparator}>•</span>;
 
   const contact = showContact ? (
-    <InlineTextButton
-      rootClassName={css.contact}
+    <SecondaryButton
       onClick={handleContactUserClick}
       enforcePagePreloadFor="SignupPage"
+      className={css.contactBtn}
     >
       <FormattedMessage id="UserCard.contactUser" />
-    </InlineTextButton>
+    </SecondaryButton>
   ) : null;
 
   const editProfileMobile = (
@@ -107,27 +107,35 @@ const UserCard = props => {
     </NamedLink>
   ) : null;
 
+  // const links = ensuredUser.id ? (
+  //   <p className={linkClasses}>
+  //     <NamedLink className={css.link} name="ProfilePage" params={{ id: ensuredUser.id.uuid }}>
+  //       <FormattedMessage id="UserCard.viewProfileLink" />
+  //     </NamedLink>
+  //     {separator}
+  //     {isCurrentUser ? editProfileMobile : contact}
+  //   </p>
+  // ) : null;
+
   const links = ensuredUser.id ? (
-    <p className={linkClasses}>
-      <NamedLink className={css.link} name="ProfilePage" params={{ id: ensuredUser.id.uuid }}>
-        <FormattedMessage id="UserCard.viewProfileLink" />
-      </NamedLink>
-      {separator}
+    <div className={css.links}>
+      {!isCurrentUser && <PrimaryButton>Choose Your Reading</PrimaryButton>}
       {isCurrentUser ? editProfileMobile : contact}
-    </p>
+    </div>
   ) : null;
 
   return (
     <div className={classes}>
       <div className={css.content}>
-        <AvatarLarge className={css.avatar} user={user} />
+        <AvatarXLarge className={css.avatar} user={user} />
         <div className={css.info}>
           <div className={css.headingRow}>
-            <FormattedMessage id="UserCard.heading" values={{ name: displayName }} />
+            {/* <FormattedMessage id="UserCard.heading" values={{ name: displayName }} /> */}
+            <H4>{displayName}</H4>
             {editProfileDesktop}
           </div>
-          {hasBio ? <ExpandableBio className={css.desktopBio} bio={bio} /> : null}
           {links}
+          {hasBio ? <ExpandableBio className={css.desktopBio} bio={bio} /> : null}
         </div>
       </div>
       {hasBio ? <ExpandableBio className={css.mobileBio} bio={bio} /> : null}

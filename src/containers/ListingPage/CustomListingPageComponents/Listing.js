@@ -3,7 +3,7 @@ import ListingNavigation from './ListingNavigation'
 
 import css from './Listing.module.css'
 import { H1, H4, H6 } from '../../../components';
-import { ensureCurrentUser, ensureUser } from '../../../util/data';
+import { ensureCurrentUser, ensureListing, ensureUser } from '../../../util/data';
 import AdvisorInformation from './AdvisorInformation';
 import AdvisorServices from './AdvisorServices';
 import MeetAdvisor from './MeetAdvisor';
@@ -23,9 +23,12 @@ const tabs = [
 ]
 
 export default function Listing(props) {
-    const { intl, listing, currentUser } = props;
+    const { intl, listing, currentUser, servicesWithAmount, onOrder} = props;
 
-    const user = listing.author;
+
+    const ensuredListing = ensureListing(listing);
+
+    const user = ensuredListing.author;
     const userIsCurrentUser = user && user.type === 'currentUser';
     const ensuredUser = userIsCurrentUser ? ensureCurrentUser(user) : ensureUser(user);
 
@@ -37,30 +40,31 @@ export default function Listing(props) {
 
     const listingHeading = intl.formatMessage({ id: 'CustomListingPage.Listing.heading' });
 
+
     return (
         <div className={css.root}>
-            {/* Listing Header */}
+            {/* Header */}
             <div>
                 <H6>{listingHeading}</H6>
                 <H4>{displayName}</H4>
             </div>
 
-            {/* Listing Navigation */}
+            {/* Navigation */}
             <ListingNavigation tabs={tabs} />
 
-            {/* Listing Advisor Information Section */}
+            {/* Advisor Information Section */}
             <div id={ADVISORINFORMATIONTABID}>
-                <AdvisorInformation listing={listing} intl={intl} />
+                <AdvisorInformation listing={ensuredListing} intl={intl} />
             </div>
 
-            {/* Listing Advisor Services Section */}
+            {/* Advisor Services Section */}
             <div id={ADVISORSERVICESTABID}>
-                <AdvisorServices listing={listing} intl={intl} />
+                <AdvisorServices services={servicesWithAmount} intl={intl} onOrder={onOrder}/>
             </div>
 
-            {/* Listing Meet Advisor Section */}
+            {/* Meet Advisor Section */}
             <div id={MEETMETABID}>
-                <MeetAdvisor listing={listing} intl={intl} />
+                <MeetAdvisor listing={ensuredListing} intl={intl} />
             </div>
         </div>
     )

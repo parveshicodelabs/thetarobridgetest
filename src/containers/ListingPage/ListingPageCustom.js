@@ -41,6 +41,7 @@ import {
     NamedRedirect,
     OrderPanel,
     LayoutSingleColumn,
+    Modal,
 } from '../../components';
 
 import TopbarContainer from '../TopbarContainer/TopbarContainer';
@@ -74,6 +75,8 @@ import SectionGallery from './SectionGallery';
 
 import css from './ListingPageCustom.module.css';
 import Listing from './CustomListingPageComponents/Listing';
+import OrderForm from './CustomListingPageComponents/OrderForm';
+// import OrderForm from './CustomListingPageComponents/OrderForm';
 
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
@@ -84,6 +87,8 @@ export const ListingPageComponent = props => {
     const [inquiryModalOpen, setInquiryModalOpen] = useState(
         props.inquiryModalOpenForListingId === props.params.id
     );
+
+    const [orderModalOpen, setOrderModalOpen] = useState(false)
 
     const {
         isAuthenticated,
@@ -264,6 +269,17 @@ export const ListingPageComponent = props => {
 
     // const createFilterOptions = options => options.map(o => ({ key: `${o.option}`, label: o.label }));
 
+    const services = currentListing.attributes.publicData.services;
+    const prices = currentListing.attributes.publicData.prices;
+
+    const servicesWithAmount = services.map(service => {
+        const priceObject = prices.find(price => price.service === service.title);
+        return {
+            ...service,
+            amount: priceObject ? priceObject.amount : 0, // Default to 0 if no price found
+        };
+    });
+
     return (
         <Page
             title={schemaTitle}
@@ -301,12 +317,17 @@ export const ListingPageComponent = props => {
                             onSubmitInquiry={onSubmitInquiry}
                             currentUser={currentUser}
                             onManageDisableScrolling={onManageDisableScrolling}
+                            onChooseReading={()=>setOrderModalOpen(true)}
                         />
                     </div>
                     <div >
-                       <Listing intl={intl} listing={currentListing} currentUser={currentUser}/>
+                        <Listing intl={intl} listing={currentListing} currentUser={currentUser} servicesWithAmount={servicesWithAmount} onOrder={()=>setOrderModalOpen(true)}/>
                     </div>
                 </div>
+
+                <Modal id="ListingPage.order" isOpen={orderModalOpen} onClose={() => setOrderModalOpen(false)} onManageDisableScrolling={onManageDisableScrolling}>
+                    <OrderForm intl={intl} onSubmit={()=>{}} authorDisplayName={authorDisplayName} servicesWithAmount={servicesWithAmount}/>
+                </Modal>
             </LayoutSingleColumn>
         </Page>
     );

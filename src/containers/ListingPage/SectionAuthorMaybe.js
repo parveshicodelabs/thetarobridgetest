@@ -21,6 +21,7 @@ const SectionAuthorMaybe = props => {
     onSubmitInquiry,
     currentUser,
     onManageDisableScrolling,
+    onChooseReading
   } = props;
 
   if (!listing.author) {
@@ -41,6 +42,7 @@ const SectionAuthorMaybe = props => {
         currentUser={currentUser}
         onContactUser={onContactUser}
         showContact={!isInquiryProcess}
+        onChooseReading={onChooseReading}
       />
       <Modal
         id="ListingPage.inquiry"

@@ -17,8 +17,7 @@ const ImageSlider = (props) => {
 export default function MeetAdvisor(props) {
   const { listing , intl} = props;
 
-  const ensuredListing = ensureListing(listing);
-  const images = ensuredListing.images || [];
+  const images = listing.images || [];
   const listingCardVariantUrls = images.map(img => {
     const url = img.attributes.variants['listing-card'].url;
     return url;

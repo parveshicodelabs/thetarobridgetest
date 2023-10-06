@@ -9,15 +9,13 @@ const tempTagline = ` Helping You Find Clarity: Hi, I'm Mars! I'm driven by a ge
 export default function AdvisorInformation(props) {
     const { listing , intl} = props;
 
-    const ensuredListing = ensureListing(listing)
-
-    const user = ensuredListing.author;
+    const user = listing.author;
     const userIsCurrentUser = user && user.type === 'currentUser';
     const ensuredUser = userIsCurrentUser ? ensureCurrentUser(user) : ensureUser(user);
 
     const taglines = ensuredUser.attributes.profile.publicData.taglines || tempTagline;
     const yearsOfExperience = ensuredUser.attributes.profile.publicData.yearsOfExperience || 0
-    const specialities = ensuredListing.attributes.publicData.Categories || [];
+    const specialities = listing.attributes.publicData.Categories || [];
 
     const specialitiesContent = <ul>
         {specialities.map((s, i) => (

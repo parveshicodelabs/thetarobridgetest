@@ -9,6 +9,7 @@ import { propTypes } from '../../../util/types';
 
 import { AvatarXLarge, NamedLink, InlineTextButton, ResponsiveImage, AspectRatioWrapper, PrimaryButton, SecondaryButton, Avatar, H4 } from '../../../components';
 
+
 import css from './UserCard.module.css';
 
 // Approximated collapsed size so that there are ~three lines of text
@@ -59,7 +60,7 @@ ExpandableBio.propTypes = {
 };
 
 const UserCard = props => {
-  const { rootClassName, className, user, currentUser, onContactUser, showContact } = props;
+  const { rootClassName, className, user, currentUser, onContactUser, showContact, onChooseReading } = props;
 
   const userIsCurrentUser = user && user.type === 'currentUser';
   const ensuredUser = userIsCurrentUser ? ensureCurrentUser(user) : ensureUser(user);
@@ -119,10 +120,12 @@ const UserCard = props => {
 
   const links = ensuredUser.id ? (
     <div className={css.links}>
-      {!isCurrentUser && <PrimaryButton>Choose Your Reading</PrimaryButton>}
+      {!isCurrentUser && <PrimaryButton onClick={onChooseReading}> <FormattedMessage id="CustomListingPage.Listing.ChooseReadingButtonText" /></PrimaryButton>}
       {isCurrentUser ? editProfileMobile : contact}
     </div>
   ) : null;
+
+
 
   return (
     <div className={classes}>
@@ -130,7 +133,6 @@ const UserCard = props => {
         <AvatarXLarge className={css.avatar} user={user} />
         <div className={css.info}>
           <div className={css.headingRow}>
-            {/* <FormattedMessage id="UserCard.heading" values={{ name: displayName }} /> */}
             <H4>{displayName}</H4>
             {editProfileDesktop}
           </div>

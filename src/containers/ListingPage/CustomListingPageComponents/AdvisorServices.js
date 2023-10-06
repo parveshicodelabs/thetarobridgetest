@@ -5,7 +5,7 @@ import { ensureListing } from '../../../util/data';
 import css from './Listing.module.css'
 
 const ServiceCard = (props) => {
-    const { service: { title, description, amount } } = props;
+    const { service: { title, description, amount }, onOrder } = props;
 
     return <div className={css.serviceCard}>
         <div>
@@ -13,7 +13,7 @@ const ServiceCard = (props) => {
             <p style={{ margin: 0 }}>{description}</p>
         </div>
         <div>
-            <PrimaryButton className={css.orderBtn}>Order For ${amount}</PrimaryButton>
+            <PrimaryButton className={css.orderBtn} onClick={onOrder}>Order For ${amount}</PrimaryButton>
         </div>
     </div>
 }
@@ -23,29 +23,16 @@ const ServiceCard = (props) => {
 
 export default function AdvisorServices(props) {
 
-    const { listing, intl } = props;
+    const { services, intl, onOrder } = props;
 
-    const ensuredListing = ensureListing(listing);
-
-    const services = ensuredListing.attributes.publicData.services;
-    const prices = ensuredListing.attributes.publicData.prices;
-
-    const servicesWithAmount = services.map(service => {
-        const priceObject = prices.find(price => price.service === service.title);
-        return {
-            ...service,
-            amount: priceObject ? priceObject.amount : 0, // Default to 0 if no price found
-        };
-    });
-    
     const servicesTitle = intl.formatMessage({ id: 'CustomListingPage.Listing.authorServicesTitle' });
 
     return (
         <div>
             <H4>{servicesTitle}</H4>
             <div>
-                {servicesWithAmount.map((s, i) => (
-                    <ServiceCard service={s} key={i} />
+                {services.map((s, i) => (
+                    <ServiceCard service={s} key={i} onOrder={onOrder}/>
                 ))}
             </div>
         </div>

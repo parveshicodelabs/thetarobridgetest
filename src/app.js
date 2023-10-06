@@ -352,3 +352,4 @@ export const renderApp = (
   const { helmet: head } = helmetContext;
   return { head, body };
 };
+

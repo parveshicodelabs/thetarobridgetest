@@ -123,7 +123,8 @@ export const ListingPageComponent = props => {
     isPendingApprovalVariant || isDraftVariant
       ? ensureOwnListing(getOwnListing(listingId))
       : ensureListing(getListing(listingId));
-
+// console.log(currentListing, '&& current listing &&');
+// console.log(config.layout.listingImage.variantPrefix, '&& variant config &&')
   const listingSlug = rawParams.slug || createSlug(currentListing.attributes.title || '');
   const params = { slug: listingSlug, ...rawParams };
 
@@ -504,6 +505,8 @@ const mapStateToProps = state => {
     inquiryModalOpenForListingId,
   } = state.ListingPage;
   const { currentUser } = state.user;
+
+  console.log(lineItems, '&& line items &&');
 
   const getListing = id => {
     const ref = { id, type: 'listing' };

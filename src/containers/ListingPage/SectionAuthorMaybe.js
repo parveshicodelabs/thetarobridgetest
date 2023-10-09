@@ -21,6 +21,7 @@ const SectionAuthorMaybe = props => {
     onSubmitInquiry,
     currentUser,
     onManageDisableScrolling,
+    onChooseReading
   } = props;
 
   if (!listing.author) {
@@ -33,14 +34,15 @@ const SectionAuthorMaybe = props => {
 
   return (
     <div id="author" className={css.sectionAuthor}>
-      <Heading as="h2" rootClassName={css.sectionHeadingWithExtraMargin}>
+      {/* <Heading as="h2" rootClassName={css.sectionHeadingWithExtraMargin}>
         <FormattedMessage id="ListingPage.aboutProviderTitle" />
-      </Heading>
+      </Heading> */}
       <UserCard
         user={listing.author}
         currentUser={currentUser}
         onContactUser={onContactUser}
         showContact={!isInquiryProcess}
+        onChooseReading={onChooseReading}
       />
       <Modal
         id="ListingPage.inquiry"

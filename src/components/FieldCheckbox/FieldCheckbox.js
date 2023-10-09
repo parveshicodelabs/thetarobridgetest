@@ -78,7 +78,7 @@ const FieldCheckboxComponent = props => {
     <span className={classes}>
       <Field type="checkbox" {...rest}>
         {props => {
-          const { input, disabled } = props;
+          const { input, disabled, checked } = props;
           return (
             <input
               id={id}
@@ -86,6 +86,7 @@ const FieldCheckboxComponent = props => {
               {...input}
               onChange={event => handleOnChange(input, event)}
               disabled={disabled}
+              checked={checked}
             />
           );
         }}

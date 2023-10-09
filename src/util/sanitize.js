@@ -161,7 +161,7 @@ const sanitizedListingFields = (value, config) => {
 const sanitizeConfiguredPublicData = (publicData, config = {}) => {
   const sanitizedConfiguredPublicData = Object.entries(publicData).reduce((sanitized, entry) => {
     const [key, value] = entry;
-    const foundListingFieldConfig = config?.listingFields?.find(d => d.key === key);
+    const foundListingFieldConfig = config?.customListingFields?.find(d => d.key === key);
     const sanitizedValue = ['listingType', 'transactionProcessAlias', 'unitType'].includes(key)
       ? sanitizeText(value)
       : foundListingFieldConfig

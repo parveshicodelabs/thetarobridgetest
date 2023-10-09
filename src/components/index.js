@@ -112,7 +112,7 @@ export { default as UserNav } from './UserNav/UserNav';
 // These components include other components //
 ///////////////////////////////////////////////
 
-export { default as Avatar, AvatarSmall, AvatarMedium, AvatarLarge } from './Avatar/Avatar';
+export { default as Avatar, AvatarSmall, AvatarMedium, AvatarLarge, AvatarXLarge } from './Avatar/Avatar';
 export { default as OrderBreakdown } from './OrderBreakdown/OrderBreakdown';
 export { default as OrderPanel } from './OrderPanel/OrderPanel';
 export { default as ListingCard } from './ListingCard/ListingCard';

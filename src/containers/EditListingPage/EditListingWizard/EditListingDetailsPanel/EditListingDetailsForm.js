@@ -113,7 +113,8 @@ const FieldSelectListingType = props => {
 
 // Add collect data for listing fields (both publicData and privateData) based on configuration
 const AddListingFields = props => {
-  const { listingType, listingFieldsConfig, intl } = props;
+  const { listingType, listingFieldsConfig, intl, initialValues, values } = props;
+
   const fields = listingFieldsConfig.reduce((pickedFields, fieldConfig) => {
     const { key, includeForListingTypes, schemaType, scope } = fieldConfig || {};
     const namespacedKey = scope === 'public' ? `pub_${key}` : `priv_${key}`;
@@ -130,6 +131,8 @@ const AddListingFields = props => {
             key={namespacedKey}
             name={namespacedKey}
             fieldConfig={fieldConfig}
+            initialValues={initialValues}
+            values={values}
             defaultRequiredMessage={intl.formatMessage({
               id: 'EditListingDetailsForm.defaultRequiredMessage',
             })}
@@ -168,6 +171,7 @@ const EditListingDetailsFormComponent = props => (
         fetchErrors,
         listingFieldsConfig,
         values,
+        initialValues
       } = formRenderProps;
 
       const { listingType } = values;
@@ -241,6 +245,8 @@ const EditListingDetailsFormComponent = props => (
             listingType={listingType}
             listingFieldsConfig={listingFieldsConfig}
             intl={intl}
+            initialValues={initialValues}
+            values={values}
           />
 
           <Button

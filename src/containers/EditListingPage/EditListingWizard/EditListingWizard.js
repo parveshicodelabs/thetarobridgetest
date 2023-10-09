@@ -179,11 +179,11 @@ const tabCompleted = (tab, listing, config) => {
     availabilityPlan,
     description,
     geolocation,
-    price,
     title,
     publicData,
     privateData,
   } = listing.attributes;
+  const {prices, services} = listing.attributes.publicData
   const images = listing.images;
   const { listingType, transactionProcessAlias, unitType, shippingEnabled, pickupEnabled } =
     publicData || {};
@@ -196,13 +196,13 @@ const tabCompleted = (tab, listing, config) => {
         title &&
         listingType &&
         transactionProcessAlias &&
-        unitType &&
-        hasValidListingFieldsInExtendedData(publicData, privateData, config)
-      );
+        unitType
+        // hasValidListingFieldsInExtendedData(publicData, privateData, config)
+      ) && services.length > 0;
     case PRICING:
-      return !!price;
+      return prices && prices.length > 0;
     case PRICING_AND_STOCK:
-      return !!price;
+      return prices && prices.length > 0;
     case DELIVERY:
       return !!deliveryOptionPicked;
     case LOCATION:
@@ -346,15 +346,16 @@ class EditListingWizard extends Component {
       stripeAccount &&
       (hasRequirements(stripeAccountData, 'past_due') ||
         hasRequirements(stripeAccountData, 'currently_due'));
+   onPublishListingDraft(id);
 
-    if (isInquiryProcess || (stripeConnected && !stripeRequirementsMissing)) {
-      onPublishListingDraft(id);
-    } else {
-      this.setState({
-        draftId: id,
-        showPayoutDetails: true,
-      });
-    }
+    // if (isInquiryProcess || (stripeConnected && !stripeRequirementsMissing)) {
+    //   onPublishListingDraft(id);
+    // } else {
+    //   this.setState({
+    //     draftId: id,
+    //     showPayoutDetails: true,
+    //   });
+    // }
   }
 
   handlePayoutModalClose() {
@@ -724,6 +725,7 @@ const EnhancedEditListingWizard = props => {
   const config = useConfiguration();
   const routeConfiguration = useRouteConfiguration();
   const intl = useIntl();
+  // console.log(config, '$$ config $$')
   return (
     <EditListingWizard
       config={config}

@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { FormattedMessage, injectIntl, intlShape } from '../../../util/reactIntl';
 import * as validators from '../../../util/validators';
-import { Form, PrimaryButton, FieldTextInput } from '../../../components';
+import { Form, PrimaryButton, FieldTextInput, FieldPhoneNumberInput } from '../../../components';
 
 import css from './SignupForm.module.css';
 
@@ -25,6 +25,7 @@ const SignupFormComponent = props => (
         invalid,
         intl,
         termsAndConditions,
+        values
       } = fieldRenderProps;
 
       // email
@@ -38,6 +39,9 @@ const SignupFormComponent = props => (
           id: 'SignupForm.emailInvalid',
         })
       );
+
+      // confirm email
+      const confirmEmailValid = validators.confirmEmailValid({ email: values.email, message: intl.formatMessage({ id: 'SignupForm.confirmEmailInvalid' }) })
 
       // password
       const passwordRequiredMessage = intl.formatMessage({
@@ -81,19 +85,6 @@ const SignupFormComponent = props => (
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           <div>
-            <FieldTextInput
-              type="email"
-              id={formId ? `${formId}.email` : 'email'}
-              name="email"
-              autoComplete="email"
-              label={intl.formatMessage({
-                id: 'SignupForm.emailLabel',
-              })}
-              placeholder={intl.formatMessage({
-                id: 'SignupForm.emailPlaceholder',
-              })}
-              validate={validators.composeValidators(emailRequired, emailValid)}
-            />
             <div className={css.name}>
               <FieldTextInput
                 className={css.firstNameRoot}
@@ -132,6 +123,32 @@ const SignupFormComponent = props => (
                 )}
               />
             </div>
+
+            <FieldTextInput
+              className={css.email}
+              type="email"
+              id={formId ? `${formId}.email` : 'email'}
+              name="email"
+              autoComplete="email"
+              label={intl.formatMessage({
+                id: 'SignupForm.emailLabel',
+              })}
+              placeholder={intl.formatMessage({
+                id: 'SignupForm.emailPlaceholder',
+              })}
+              validate={validators.composeValidators(emailRequired, emailValid)}
+            />
+
+            <FieldTextInput
+              type="email"
+              id={formId ? `${formId}.confirEmail` : 'confirmEmail'}
+              name="confirmEmail"
+              label={intl.formatMessage({
+                id: 'SignupForm.confirmEmailLabel',
+              })}
+              validate={confirmEmailValid}
+            />
+
             <FieldTextInput
               className={css.password}
               type="password"
@@ -145,6 +162,16 @@ const SignupFormComponent = props => (
                 id: 'SignupForm.passwordPlaceholder',
               })}
               validate={passwordValidators}
+            />
+
+            <FieldPhoneNumberInput
+              id={`${formId}.phoneNumber`}
+              name="phoneNumber"
+              label="Phone number"
+              placeholder="Phone number"
+              validate={validators.required(intl.formatMessage({
+                id: 'SignupForm.phoneNumberInvalid',
+              }))}
             />
           </div>
 

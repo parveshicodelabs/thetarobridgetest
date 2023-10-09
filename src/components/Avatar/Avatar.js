@@ -17,6 +17,7 @@ import css from './Avatar.module.css';
 const AVATAR_SIZES = '40px';
 const AVATAR_SIZES_MEDIUM = '60px';
 const AVATAR_SIZES_LARGE = '96px';
+const AVTAR_SIZES_XLARGE = '400px';
 
 const AVATAR_IMAGE_VARIANTS = [
   // 40x40
@@ -30,6 +31,12 @@ const AVATAR_IMAGE_VARIANTS = [
 
   // 480x480
   'square-small2x',
+
+  //600x800
+  'listing-card-2x',
+
+  //800x1200
+  'listing-card-4x'
 ];
 
 export const AvatarComponent = props => {
@@ -42,8 +49,8 @@ export const AvatarComponent = props => {
     disableProfileLink,
     intl,
   } = props;
-  const classes = classNames(rootClassName || css.root, className);
 
+  const classes = classNames(rootClassName || css.root, className);
   const userIsCurrentUser = user && user.type === 'currentUser';
   const avatarUser = userIsCurrentUser ? ensureCurrentUser(user) : ensureUser(user);
 
@@ -53,8 +60,8 @@ export const AvatarComponent = props => {
   const defaultUserDisplayName = isBannedUser
     ? intl.formatMessage({ id: 'Avatar.bannedUserDisplayName' })
     : isDeletedUser
-    ? intl.formatMessage({ id: 'Avatar.deletedUserDisplayName' })
-    : '';
+      ? intl.formatMessage({ id: 'Avatar.deletedUserDisplayName' })
+      : '';
 
   const defaultUserAbbreviatedName = '';
 
@@ -166,4 +173,16 @@ export const AvatarLarge = props => (
     {...props}
   />
 );
+
 AvatarLarge.displayName = 'AvatarLarge';
+
+
+export const AvatarXLarge = props => (
+  <Avatar
+    rootClassName={css.xLargeAvatar}
+    // renderSizes={}
+    {...props}
+  />
+)
+
+AvatarXLarge.displayName = 'AvatarXLarge';

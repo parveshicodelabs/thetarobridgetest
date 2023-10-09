@@ -60,14 +60,18 @@ export const EditListingPricingFormComponent = props => (
         updated,
         updateInProgress,
         fetchErrors,
+        services
       } = formRenderProps;
 
+
+      
       const priceValidators = getPriceValidators(
         listingMinimumPriceSubUnits,
         marketplaceCurrency,
         intl
       );
 
+      
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
@@ -86,20 +90,21 @@ export const EditListingPricingFormComponent = props => (
               <FormattedMessage id="EditListingPricingForm.showListingFailed" />
             </p>
           ) : null}
-          <FieldCurrencyInput
-            id={`${formId}price`}
-            name="price"
-            className={css.input}
-            autoFocus={autoFocus}
-            label={intl.formatMessage(
-              { id: 'EditListingPricingForm.pricePerProduct' },
-              { unitType }
-            )}
-            placeholder={intl.formatMessage({ id: 'EditListingPricingForm.priceInputPlaceholder' })}
-            currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
-            validate={priceValidators}
-          />
+          {services.map(service => {
+            const label = `${service.split('_')[0]} Price`.toLocaleUpperCase()
+            return <FieldCurrencyInput
+              key={`${service}-price`}
+              id={`${service}-price`}
+              name={`${service}`}
+              className={css.input}
+              autoFocus={autoFocus}
+              label={label}
+              placeholder={intl.formatMessage({ id: 'EditListingPricingForm.priceInputPlaceholder' })}
+              currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
+              validate={priceValidators}
+            />
 
+          })}
           <Button
             className={css.submitButton}
             type="submit"

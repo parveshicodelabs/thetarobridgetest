@@ -9,7 +9,7 @@
    :privileged? true,
    :actions
    [{:name :action/update-protected-data}
-    {:name :action/create-pending-stock-reservation}
+  {:name :action/create-pending-stock-reservation}
     {:name :action/privileged-set-line-items}
     {:name :action/stripe-create-payment-intent}],
    :to :state/pending-payment}

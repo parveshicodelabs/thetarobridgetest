@@ -211,7 +211,7 @@ export const ClientApp = props => {
   const { store, hostedTranslations = {}, hostedConfig = {} } = props;
   const appConfig = mergeConfig(hostedConfig, defaultConfig);
 
-  if(typeof window != 'undefined') {
+  if(typeof window != 'undefined' && Object.keys(window.MemberSpace).includes("getMemberInfo")) {
   console.log(window.MemberSpace, '&& memberspace object &&');
 
   console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');

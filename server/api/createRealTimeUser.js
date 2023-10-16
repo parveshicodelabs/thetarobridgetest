@@ -11,8 +11,8 @@ const observer = () => {
             if (change.type === 'added') {
                 const newDocumentData = change.doc.data();
                 const newDocumentId = change.doc.id;
-                console.log('New document added:', newDocumentData);
-                console.log('new document id', newDocumentId);
+                // console.log('New document added:', newDocumentData);
+                // console.log('new document id', newDocumentId);
 
                 //let's create new user in sharetirbe
                 //User must not be created if they are already created

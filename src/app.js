@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { any, string } from 'prop-types';
 import ReactDOMServer from 'react-dom/server';
-
 // react-dates needs to be initialized before using any react-dates component
 // https://github.com/airbnb/react-dates#initialize
 // NOTE: Initializing it here will initialize it also for app.test.js
@@ -34,6 +33,7 @@ import Routes from './routing/Routes';
 
 // Sharetribe Web Template uses English translations as default translations.
 import defaultMessages from './translations/en.json';
+import { loginWithMemberSpace } from './util/api';
 
 // If you want to change the language of default (fallback) translations,
 // change the imports to match the wanted locale:
@@ -122,16 +122,16 @@ const MomentLocaleLoader = props => {
     ['en', 'en-US'].includes(locale) || isAlreadyImportedLocale
       ? NoLoader
       : ['fr', 'fr-FR'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "fr" */ 'moment/locale/fr'))
-      : ['de', 'de-DE'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "de" */ 'moment/locale/de'))
-      : ['es', 'es-ES'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "es" */ 'moment/locale/es'))
-      : ['fi', 'fi-FI'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "fi" */ 'moment/locale/fi'))
-      : ['nl', 'nl-NL'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "nl" */ 'moment/locale/nl'))
-      : loadable.lib(() => import(/* webpackChunkName: "locales" */ 'moment/min/locales.min'));
+        ? loadable.lib(() => import(/* webpackChunkName: "fr" */ 'moment/locale/fr'))
+        : ['de', 'de-DE'].includes(locale)
+          ? loadable.lib(() => import(/* webpackChunkName: "de" */ 'moment/locale/de'))
+          : ['es', 'es-ES'].includes(locale)
+            ? loadable.lib(() => import(/* webpackChunkName: "es" */ 'moment/locale/es'))
+            : ['fi', 'fi-FI'].includes(locale)
+              ? loadable.lib(() => import(/* webpackChunkName: "fi" */ 'moment/locale/fi'))
+              : ['nl', 'nl-NL'].includes(locale)
+                ? loadable.lib(() => import(/* webpackChunkName: "nl" */ 'moment/locale/nl'))
+                : loadable.lib(() => import(/* webpackChunkName: "locales" */ 'moment/min/locales.min'));
 
   return (
     <MomentLocale>
@@ -210,10 +210,34 @@ const EnvironmentVariableWarning = props => {
 export const ClientApp = props => {
   const { store, hostedTranslations = {}, hostedConfig = {} } = props;
   const appConfig = mergeConfig(hostedConfig, defaultConfig);
+  const [memberSpaceLogin, setMemberSpaceLogin] = useState(false);
 
-  console.log(window.MemberSpace, '&& memberspace object &&');
+  useEffect(() => {
+    let loggedIn = false;
+    let user = null;
+    if (typeof window != 'undefined' && Object.keys(window.MemberSpace).includes("getMemberInfo")) {
+      console.log(window.MemberSpace, '&& memberspace object &&');
+      console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
+      const memberInfo = window.MemberSpace.getMemberInfo();
+      loggedIn = memberInfo.isLoggedIn;
+      user = memberInfo.memberInfo;
+    }
 
-  console.log(window.MemberSpace.getMemberInfo(), '&& member info &&');
+    if (loggedIn && user) {
+      setMemberSpaceLogin(true);
+      (async function () {
+        try {
+          await loginWithMemberSpace(user);
+
+        } catch (error) {
+          console.log(error, '!!error')
+        }
+        setMemberSpaceLogin(false);
+      })()
+
+    }
+
+  }, [])
 
   // Show warning on the localhost:3000, if the environment variable key contains "SECRET"
   if (appSettings.dev) {

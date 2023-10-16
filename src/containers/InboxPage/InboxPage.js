@@ -154,11 +154,11 @@ export const InboxItem = props => {
         <div className={css.itemUsername}>{otherUserDisplayName}</div>
         <div className={css.itemTitle}>{listing?.attributes?.title}</div>
         <div className={css.itemDetails}>
-          {isBooking ? (
+          {/* {isBooking ? (
             <BookingTimeInfoMaybe transaction={tx} />
           ) : hasPricingData && showStock ? (
             <FormattedMessage id="InboxPage.quantity" values={{ quantity }} />
-          ) : null}
+          ) : null} */}
         </div>
         <div className={css.itemState}>
           <div className={stateClasses}>

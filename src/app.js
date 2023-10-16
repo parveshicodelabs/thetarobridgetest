@@ -211,10 +211,11 @@ export const ClientApp = props => {
   const { store, hostedTranslations = {}, hostedConfig = {} } = props;
   const appConfig = mergeConfig(hostedConfig, defaultConfig);
 
+  if(typeof window != 'undefined' && Object.keys(window.MemberSpace).includes("getMemberInfo")) {
   console.log(window.MemberSpace, '&& memberspace object &&');
 
-  console.log(window.MemberSpace.getMemberInfo(), '&& member info &&');
-
+  console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
+  }
   // Show warning on the localhost:3000, if the environment variable key contains "SECRET"
   if (appSettings.dev) {
     const envVars = process.env || {};

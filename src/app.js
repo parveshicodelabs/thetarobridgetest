@@ -7,7 +7,7 @@ import ReactDOMServer from 'react-dom/server';
 import 'react-dates/initialize';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, StaticRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import loadable from '@loadable/component';
 import difference from 'lodash/difference';
 import mapValues from 'lodash/mapValues';
@@ -150,6 +150,7 @@ const Configurations = props => {
   const routeConfig = routeConfiguration(appConfig.layout);
   const locale = isTestEnv ? 'en' : appConfig.localization.locale;
 
+
   return (
     <ConfigurationProvider value={appConfig}>
       <MomentLocaleLoader locale={locale}>
@@ -210,8 +211,7 @@ const EnvironmentVariableWarning = props => {
 export const ClientApp = props => {
   const { store, hostedTranslations = {}, hostedConfig = {} } = props;
   const appConfig = mergeConfig(hostedConfig, defaultConfig);
-  const [memberSpaceLogin, setMemberSpaceLogin] = useState(false);
-
+ const [memberSpaceLogging, setMemberSpaceLogging] = useState(false)
   useEffect(() => {
     let loggedIn = false;
     let user = null;
@@ -224,7 +224,7 @@ export const ClientApp = props => {
     }
 
     if (loggedIn && user) {
-      setMemberSpaceLogin(true);
+      setMemberSpaceLogging(true);
       (async function () {
         try {
           await loginWithMemberSpace(user);
@@ -232,11 +232,10 @@ export const ClientApp = props => {
         } catch (error) {
           console.log(error, '!!error')
         }
-        setMemberSpaceLogin(false);
+        setMemberSpaceLogging(false);
       })()
 
     }
-
   }, [])
 
   // Show warning on the localhost:3000, if the environment variable key contains "SECRET"

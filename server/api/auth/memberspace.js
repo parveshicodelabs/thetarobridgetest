@@ -77,6 +77,7 @@ module.exports = async (req, res, next) => {
     const user = req.body;
     const {email, firstName, lastName} = user;
     //Step 1: create idp token
+    console.log('idp token creating..')
     createIdToken(idpClientId, user, { signingAlg: 'RS256', rsaPrivateKey, keyId })
     .then(idpToken => {
       const userData = {
@@ -85,6 +86,7 @@ module.exports = async (req, res, next) => {
         lastName,
         idpToken
       };
+      console.log(idpToken, 'idp token created!')
       //Step 2: login with idp
       req.body.idpToken = idpToken;
       req.body.idpId = idpId;

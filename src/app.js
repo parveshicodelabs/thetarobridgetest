@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { any, string } from 'prop-types';
 import ReactDOMServer from 'react-dom/server';
-
 // react-dates needs to be initialized before using any react-dates component
 // https://github.com/airbnb/react-dates#initialize
 // NOTE: Initializing it here will initialize it also for app.test.js
 import 'react-dates/initialize';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, StaticRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import loadable from '@loadable/component';
 import difference from 'lodash/difference';
 import mapValues from 'lodash/mapValues';
@@ -34,6 +33,7 @@ import Routes from './routing/Routes';
 
 // Sharetribe Web Template uses English translations as default translations.
 import defaultMessages from './translations/en.json';
+import { loginWithMemberSpace } from './util/api';
 
 // If you want to change the language of default (fallback) translations,
 // change the imports to match the wanted locale:
@@ -122,16 +122,16 @@ const MomentLocaleLoader = props => {
     ['en', 'en-US'].includes(locale) || isAlreadyImportedLocale
       ? NoLoader
       : ['fr', 'fr-FR'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "fr" */ 'moment/locale/fr'))
-      : ['de', 'de-DE'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "de" */ 'moment/locale/de'))
-      : ['es', 'es-ES'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "es" */ 'moment/locale/es'))
-      : ['fi', 'fi-FI'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "fi" */ 'moment/locale/fi'))
-      : ['nl', 'nl-NL'].includes(locale)
-      ? loadable.lib(() => import(/* webpackChunkName: "nl" */ 'moment/locale/nl'))
-      : loadable.lib(() => import(/* webpackChunkName: "locales" */ 'moment/min/locales.min'));
+        ? loadable.lib(() => import(/* webpackChunkName: "fr" */ 'moment/locale/fr'))
+        : ['de', 'de-DE'].includes(locale)
+          ? loadable.lib(() => import(/* webpackChunkName: "de" */ 'moment/locale/de'))
+          : ['es', 'es-ES'].includes(locale)
+            ? loadable.lib(() => import(/* webpackChunkName: "es" */ 'moment/locale/es'))
+            : ['fi', 'fi-FI'].includes(locale)
+              ? loadable.lib(() => import(/* webpackChunkName: "fi" */ 'moment/locale/fi'))
+              : ['nl', 'nl-NL'].includes(locale)
+                ? loadable.lib(() => import(/* webpackChunkName: "nl" */ 'moment/locale/nl'))
+                : loadable.lib(() => import(/* webpackChunkName: "locales" */ 'moment/min/locales.min'));
 
   return (
     <MomentLocale>
@@ -149,6 +149,7 @@ const Configurations = props => {
   const { appConfig, children } = props;
   const routeConfig = routeConfiguration(appConfig.layout);
   const locale = isTestEnv ? 'en' : appConfig.localization.locale;
+
 
   return (
     <ConfigurationProvider value={appConfig}>
@@ -211,11 +212,34 @@ export const ClientApp = props => {
   const { store, hostedTranslations = {}, hostedConfig = {} } = props;
   const appConfig = mergeConfig(hostedConfig, defaultConfig);
 
-  if(typeof window != 'undefined' && Object.keys(window.MemberSpace).includes("getMemberInfo")) {
-  console.log(window.MemberSpace, '&& memberspace object &&');
+  useEffect(() => {
+    let loggedIn = false;
+    let user = null;
+    if (typeof window != 'undefined' && Object.keys(window.MemberSpace).includes("getMemberInfo")) {
+      console.log(window.MemberSpace, '&& memberspace object &&');
+      console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
+      const memberInfo = window.MemberSpace.getMemberInfo();
+      loggedIn = memberInfo?.isLoggedIn;
+      const {email, firstName, lastName, id} = memberInfo?.memberInfo || {};
+      if(email && firstName && lastName && id){
+        user = {email, firstName, lastName, userId:id, emailVarified:true};
+      }
+      console.log(loggedIn, 'isLoggedIn');
+      console.log(user, 'user');
+    }
 
-  console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
-  }
+    if (loggedIn && user) {
+      (async function () {
+        try {
+          console.log('making request to login with memberspace')
+          await loginWithMemberSpace(user);
+        } catch (error) {
+          console.log(error, '!!error');
+        }
+      })()
+    }
+  }, [])
+
   // Show warning on the localhost:3000, if the environment variable key contains "SECRET"
   if (appSettings.dev) {
     const envVars = process.env || {};

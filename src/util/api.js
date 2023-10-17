@@ -56,7 +56,7 @@ const request = (path, options = {}) => {
   // If headers are not set, we assume that the body should be serialized as transit format.
   const shouldSerializeBody =
     (!headers || headers['Content-Type'] === 'application/transit+json') && body;
-  const bodyMaybe = shouldSerializeBody ? { body: serialize(body) } : {};
+  const bodyMaybe = shouldSerializeBody ? { body: serialize(body) } : {body:JSON.stringify(body)};
 
   const fetchOptions = {
     credentials: credentials || 'include',
@@ -144,3 +144,7 @@ export const transitionPrivileged = body => {
 export const createUserWithIdp = body => {
   return post('/api/auth/create-user-with-idp', body);
 };
+
+export const loginWithMemberSpace = body => {
+  return post('/api/auth/memberspace/login', body)
+}

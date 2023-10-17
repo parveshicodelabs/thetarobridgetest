@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import loadable from '@loadable/component';
 
 import { bool, object } from 'prop-types';
@@ -17,6 +17,14 @@ const PageBuilder = loadable(() =>
 
 export const LandingPageComponent = props => {
   const { pageAssetsData, inProgress, error } = props;
+
+  useEffect(() => {
+    if(typeof window != 'undefined' && Object.keys(window.MemberSpace).includes("getMemberInfo")) {
+      console.log(window.MemberSpace, '&& memberspace object &&');
+
+      console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), 'member info at landing');
+      }
+  }, [])
 
   return (
     <PageBuilder

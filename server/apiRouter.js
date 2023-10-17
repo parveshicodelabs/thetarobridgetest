@@ -21,7 +21,7 @@ const createUserWithIdp = require('./api/auth/createUserWithIdp');
 const { authenticateFacebook, authenticateFacebookCallback } = require('./api/auth/facebook');
 const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/google');
 
-const loginWithIDPMemberspace = require('./api/auth/memberspace')
+const memberspace = require('./api/auth/memberspace');
 
 const router = express.Router();
 
@@ -82,7 +82,8 @@ router.get('/auth/google', authenticateGoogle);
 // loginWithIdp endpoint in Flex API to authenticate user to Flex
 router.get('/auth/google/callback', authenticateGoogleCallback);
 
-//login with IDP MemberSpace
-router.post('/auth/memberspace/login', loginWithIDPMemberspace)
+//create Acc with IDP MemberSpace
+// router.post('/auth/memberspace/createAcc', memberspace, createUserWithIdp)
+router.post('/auth/memberspace/login', memberspace)
 
 module.exports = router;

@@ -211,7 +211,7 @@ const EnvironmentVariableWarning = props => {
 export const ClientApp = props => {
   const { store, hostedTranslations = {}, hostedConfig = {} } = props;
   const appConfig = mergeConfig(hostedConfig, defaultConfig);
- const [memberSpaceLogging, setMemberSpaceLogging] = useState(false)
+
   useEffect(() => {
     let loggedIn = false;
     let user = null;
@@ -219,22 +219,24 @@ export const ClientApp = props => {
       console.log(window.MemberSpace, '&& memberspace object &&');
       console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
       const memberInfo = window.MemberSpace.getMemberInfo();
-      loggedIn = memberInfo.isLoggedIn;
-      user = memberInfo.memberInfo;
+      loggedIn = memberInfo?.isLoggedIn;
+      const {email, firstName, lastName, id} = memberInfo?.memberInfo || {};
+      if(email && firstName && lastName && id){
+        user = {email, firstName, lastName, userId:id, emailVarified:true};
+      }
+      console.log(loggedIn, 'isLoggedIn');
+      console.log(user, 'user');
     }
 
     if (loggedIn && user) {
-      setMemberSpaceLogging(true);
       (async function () {
         try {
+          console.log('making request to login with memberspace')
           await loginWithMemberSpace(user);
-
         } catch (error) {
-          console.log(error, '!!error')
+          console.log(error, '!!error');
         }
-        setMemberSpaceLogging(false);
       })()
-
     }
   }, [])
 

@@ -220,14 +220,13 @@ export const ClientApp = props => {
       console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
       const memberInfo = window.MemberSpace.getMemberInfo();
       loggedIn = memberInfo?.isLoggedIn;
-      const {email, firstName, lastName, id} = memberInfo?.memberInfo || {};
-      if(email && firstName && lastName && id){
-        user = {email, firstName, lastName, userId:id, emailVarified:true};
+      const {email, firstName, lastName} = memberInfo?.memberInfo || {};
+      if(email && firstName && lastName ){
+        user = {email, firstName, lastName};
       }
       console.log(loggedIn, 'isLoggedIn');
       console.log(user, 'user');
     }
-
     if (loggedIn && user) {
       (async function () {
         try {

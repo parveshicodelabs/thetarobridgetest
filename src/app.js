@@ -219,8 +219,12 @@ export const ClientApp = props => {
       console.log(window.MemberSpace, '&& memberspace object &&');
       console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
       const memberInfo = window.MemberSpace.getMemberInfo();
-      loggedIn = memberInfo?.isLoggedIn;
-      const {email, firstName, lastName} = memberInfo?.memberInfo || {};
+      loggedIn = true; //memberInfo?.isLoggedIn;
+      const {email, firstName, lastName} =  {
+        "email": "jay@icodelabs.co",
+        "firstName": "Jay",
+        "lastName": "T"
+    };
       if(email && firstName && lastName ){
         user = {email, firstName, lastName};
       }

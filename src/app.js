@@ -223,7 +223,7 @@ export const ClientApp = props => {
       const {email, firstName, lastName} =  {
         "email": "jay@icodelabs.co",
         "firstName": "Jay",
-        "lastName": "T"
+        "lastName": "T",
     };
       if(email && firstName && lastName ){
         user = {email, firstName, lastName};

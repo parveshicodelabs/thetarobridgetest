@@ -2,10 +2,9 @@ const http = require('http');
 const https = require('https');
 const sharetribeSdk = require("sharetribe-flex-sdk");
 const { createIdToken } = require("../../api-util/idToken");
-
 const sdkUtils = require('../../api-util/sdk');
 const createUserWithIdp = require("./createUserWithIdp");
-
+const { v4: uuidv4 } = require('uuid');
 
 const idpClientId = process.env.REACT_APP_MEMBERSPACE_CLIENT_ID;
 const idpId = 'memberspace';
@@ -113,17 +112,19 @@ const loginWithIdp = (user, req, res, idpClientId, idpId)=> {
 
 module.exports = async (req, res, next) => {
     const user = req.body;
+    const userId = uuidv4();
     const {email, firstName, lastName, } = user;
     //Step 1: create idp token
-    console.log('idp token creating..')
-    createIdToken(idpClientId, {...user, emailVerified:false}, { signingAlg: 'RS256', rsaPrivateKey, keyId })
+    console.log('idp token creating..', userId)
+    createIdToken(idpClientId, {...user, emailVerified:false, userId}, { signingAlg: 'RS256', rsaPrivateKey, keyId })
     .then(idpToken => {
       const userData = {
         email,
         firstName,
         lastName,
         idpToken,
-        emailVerified:false
+        emailVerified:false,
+        userId,
       };
       console.log(idpToken, 'idp token created!')
       //Step 2: login with idp

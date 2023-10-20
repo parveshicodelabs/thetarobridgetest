@@ -50,7 +50,6 @@ module.exports = (req, res) => {
   // Choose the idpClientId based on which authentication method is used.
   const idpClientId =
     idpId === FACEBOOK_IDP_ID ? FACBOOK_APP_ID : idpId === GOOGLE_IDP_ID ? GOOGLE_CLIENT_ID : idpId === MEMBERSPACE_IDP_ID ? MEMBERSPACE_CLIENT_ID : null;
-  console.log("jay test create user", idpId, idpClientId, idpToken)
   sdk.currentUser
     .createWithIdp({ idpId, idpClientId, idpToken, ...rest })
     .then(() =>

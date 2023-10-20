@@ -212,36 +212,32 @@ export const ClientApp = props => {
   const { store, hostedTranslations = {}, hostedConfig = {} } = props;
   const appConfig = mergeConfig(hostedConfig, defaultConfig);
 
-  useEffect(() => {
-    let loggedIn = false;
-    let user = null;
-    if (typeof window != 'undefined' && Object.keys(window.MemberSpace).includes("getMemberInfo")) {
-      console.log(window.MemberSpace, '&& memberspace object &&');
-      console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
-      const memberInfo = window.MemberSpace.getMemberInfo();
-      loggedIn = true; //memberInfo?.isLoggedIn;
-      const {email, firstName, lastName} =  {
-        "email": "jay@icodelabs.co",
-        "firstName": "Jay",
-        "lastName": "T",
-    };
-      if(email && firstName && lastName ){
-        user = {email, firstName, lastName};
-      }
-      console.log(loggedIn, 'isLoggedIn');
-      console.log(user, 'user');
-    }
-    if (loggedIn && user) {
-      (async function () {
-        try {
-          console.log('making request to login with memberspace')
-          await loginWithMemberSpace(user);
-        } catch (error) {
-          console.log(error, '!!error');
-        }
-      })()
-    }
-  }, [])
+  // useEffect(() => {
+  //   let loggedIn = false;
+  //   let user = null;
+  //   if (typeof window != 'undefined' && Object.keys(window.MemberSpace).includes("getMemberInfo")) {
+  //     console.log(window.MemberSpace, '&& memberspace object &&');
+  //     console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
+  //     const memberInfo = window.MemberSpace.getMemberInfo();
+  //     loggedIn = memberInfo?.isLoggedIn;
+  //     const {email, firstName, lastName} =  memberInfo?.memberInfo || {};
+  //     if(email && firstName && lastName ){
+  //       user = {email, firstName, lastName};
+  //     }
+  //     console.log(loggedIn, 'isLoggedIn');
+  //     console.log(user, 'user');
+  //   }
+  //   if (loggedIn && user) {
+  //     (async function () {
+  //       try {
+  //         console.log('making request to login with memberspace')
+  //         await loginWithMemberSpace(user);
+  //       } catch (error) {
+  //         console.log(error, '!!error');
+  //       }
+  //     })()
+  //   }
+  // }, [])
 
   // Show warning on the localhost:3000, if the environment variable key contains "SECRET"
   if (appSettings.dev) {

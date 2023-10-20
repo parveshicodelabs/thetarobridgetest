@@ -27,7 +27,7 @@ import SearchIcon from './SearchIcon';
 import TopbarSearchForm from './TopbarSearchForm/TopbarSearchForm';
 import TopbarMobileMenu from './TopbarMobileMenu/TopbarMobileMenu';
 import TopbarDesktop from './TopbarDesktop/TopbarDesktop';
-
+import { loginWithMemberSpace } from '../../util/api';
 import css from './Topbar.module.css';
 
 const MAX_MOBILE_SCREEN_WIDTH = 768;
@@ -81,6 +81,36 @@ class TopbarComponent extends Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
+  componentDidMount(){
+    const {authInProgress,
+      currentUser,} = this.props;
+      if(!authInProgress && !currentUser){
+        let loggedIn = false;
+        let user = null;
+        if (typeof window != 'undefined' && Object.keys(window.MemberSpace).includes("getMemberInfo")) {
+          console.log(window.MemberSpace, '&& memberspace object &&');
+          console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
+          const memberInfo = window.MemberSpace.getMemberInfo();
+          loggedIn = memberInfo?.isLoggedIn;
+          const {email, firstName, lastName} =  memberInfo?.memberInfo || {};
+          if(email && firstName && lastName ){
+            user = {email, firstName, lastName};
+          }
+          console.log(loggedIn, 'isLoggedIn');
+          console.log(user, 'user');
+        }
+        if (loggedIn && user) {
+          (async function () {
+            try {
+              console.log('making request to login with memberspace')
+              await loginWithMemberSpace(user);
+            } catch (error) {
+              console.log(error, '!!error');
+            }
+          })()
+        }
+      }
+  }
   handleMobileMenuOpen() {
     redirectToURLWithModalState(this.props, 'mobilemenu');
   }

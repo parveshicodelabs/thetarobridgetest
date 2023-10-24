@@ -40,6 +40,7 @@ const log = require('./log');
 const { sitemapStructure } = require('./sitemap');
 const csp = require('./csp');
 const sdkUtils = require('./api-util/sdk');
+const fireStoreListener = require('./api/createMemberspaceUser');
 
 const buildPath = path.resolve(__dirname, '..', 'build');
 const dev = process.env.REACT_APP_ENV === 'development';
@@ -272,6 +273,8 @@ const server = app.listen(PORT, () => {
   if (dev) {
     console.log(`Open http://localhost:${PORT}/ and start hacking!`);
   }
+  console.log('firestore fired!!')
+  fireStoreListener();
 });
 
 // Graceful shutdown:

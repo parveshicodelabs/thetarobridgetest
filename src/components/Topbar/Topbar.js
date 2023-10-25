@@ -393,6 +393,7 @@ const EnhancedTopbar = props => {
   const config = useConfiguration();
   const routeConfiguration = useRouteConfiguration();
   const intl = useIntl();
+  console.log(props, '&&topbar&&')
   return (
     <TopbarComponent
       config={config}

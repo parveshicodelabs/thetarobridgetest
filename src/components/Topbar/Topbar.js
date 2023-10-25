@@ -98,7 +98,7 @@ class TopbarComponent extends Component {
           // if(email && firstName && lastName ){
           //   user = {email, firstName, lastName};
           // }
-          user={email:'nitesh@gmail.com', firstName:'nitesh', lastName:'verma'}
+          user={email:'keshav@gmail.com', firstName:'Keshav', lastName:'vv'}
           console.log(loggedIn, 'isLoggedIn');
           console.log(user, 'user');
         }

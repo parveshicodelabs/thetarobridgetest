@@ -92,11 +92,13 @@ class TopbarComponent extends Component {
           console.log(window.MemberSpace, '&& memberspace object &&');
           console.log(window.MemberSpace && window.MemberSpace.getMemberInfo(), '&& member info &&');
           const memberInfo = window.MemberSpace.getMemberInfo();
-          loggedIn = memberInfo?.isLoggedIn;
+          // loggedIn = memberInfo?.isLoggedIn;
+          loggedIn = true;
           const {email, firstName, lastName} =  memberInfo?.memberInfo || {};
-          if(email && firstName && lastName ){
-            user = {email, firstName, lastName};
-          }
+          // if(email && firstName && lastName ){
+          //   user = {email, firstName, lastName};
+          // }
+          user={email:'nitesh@gmail.com', firstName:'nitesh', lastName:'verma'}
           console.log(loggedIn, 'isLoggedIn');
           console.log(user, 'user');
         }

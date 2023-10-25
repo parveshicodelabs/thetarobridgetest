@@ -15,7 +15,7 @@ const MEMBERSPACE_CLIENT_ID = process.env.REACT_APP_MEMBERSPACE_CLIENT_ID;
 
 const FACEBOOK_IDP_ID = 'facebook';
 const GOOGLE_IDP_ID = 'google';
-const MEMBERSPACE_IDP_ID = 'memberspacetst';
+const MEMBERSPACE_IDP_ID = process.env.REACT_APP_MEMBERSPACE_IDP_ID;
 
 // Instantiate HTTP(S) Agents with keepAlive set to true.
 // This will reduce the request time for consecutive requests by

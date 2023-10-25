@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const apiRouter = require('./apiRouter');
 const wellKnownRouter = require('./wellKnownRouter');
-const observer = require('./api/createRealTimeUser')
+const fireStoreListener = require('./api/createMemberspaceUser')
 
 const radix = 10;
 const PORT = parseInt(process.env.REACT_APP_DEV_API_SERVER_PORT, radix);
@@ -30,7 +30,6 @@ app.use('/api', apiRouter);
 
 app.listen(PORT, () => {
   console.log(`API server listening on ${PORT}`);
-  
-  //stoped temporarly
-  // observer();
+  fireStoreListener();
+  console.log('firestore fired!!')
 });

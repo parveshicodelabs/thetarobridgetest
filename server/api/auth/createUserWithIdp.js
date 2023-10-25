@@ -26,14 +26,16 @@ const httpsAgent = new https.Agent({ keepAlive: true });
 
 const baseUrl = BASE_URL ? { baseUrl: BASE_URL } : {};
 
-module.exports = async(req, res) => {
+module.exports = (req, res) => {
+  console.log('request comminggggg......')
+  console.log(req.body, '=>body<=');
   const tokenStore = sharetribeSdk.tokenStore.expressCookieStore({
     clientId: CLIENT_ID,
     req,
     res,
     secure: USING_SSL,
   });
-
+  
   const sdk = sharetribeSdk.createInstance({
     transitVerbose: TRANSIT_VERBOSE,
     clientId: CLIENT_ID,

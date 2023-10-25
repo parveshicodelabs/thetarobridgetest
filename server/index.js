@@ -105,6 +105,8 @@ if (cspEnabled) {
   });
 }
 
+app.use(bodyParser.json());
+
 // Redirect HTTP to HTTPS if REDIRECT_SSL is `true`.
 // This also works behind reverse proxies (load balancers) as they are for example used by Heroku.
 // In such cases, however, the TRUST_PROXY parameter has to be set (see below)

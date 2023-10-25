@@ -2,7 +2,6 @@ const axios = require('axios');
 
 const firebaseAdminSdk = require('../api-util/firebaseAdminSDK');
 const { createIdToken } = require('../api-util/idToken');
-const createUserWithIdp = require('./auth/createUserWithIdp');
 
 const collection = 'com1234';
 const collectionRef = firebaseAdminSdk.collection(collection);
@@ -54,11 +53,16 @@ const fireStoreListener = () => {
               console.log('idp token generated:=>>', idpToken);
               //Having idpToken create user with idp
               const signupUser = {email, firstName, lastName, idpToken, idpId}
-             await createUserWithIdp({body:signupUser}, null)
-             console.log('&& user created &&');
-             await collectionRef.doc(newDocumentId).set({ userSynced: true }, { merge: true });
+              const config = {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              };
+              await axios.post(`${apiBaseUrl}/api/auth/create-user-with-idp`, signupUser, config);
+              console.log('&& user created &&');
+              await collectionRef.doc(newDocumentId).set({ userSynced: true }, { merge: true });
             } catch (error) {
-              console.log(error, '&& error occured &&');
+              console.log('&& error occured &&');
             }
           }
         }

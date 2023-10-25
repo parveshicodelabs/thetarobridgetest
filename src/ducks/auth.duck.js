@@ -239,11 +239,12 @@ export const memberspaceLogin = ({email, firstName, lastName}) => async (dispatc
     return Promise.reject(new Error('Login or logout already in progress'));
   }
   dispatch(loginRequest());
-  
   try {
-    const response = await loginWithMemberSpace({email, firstName, lastName});
-  } catch (error) {
-    
+     await loginWithMemberSpace({email, firstName, lastName});
+     dispatch(loginSuccess());
+     dispatch(fetchCurrentUser());
+  } catch (e) {
+    log.error(e, 'create-user-with-idp-failed', { params });
+    return dispatch(loginError(storableError(e)));
   }
-  
 };

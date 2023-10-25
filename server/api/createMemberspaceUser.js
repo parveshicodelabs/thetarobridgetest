@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const idpClientId = process.env.REACT_APP_MEMBERSPACE_CLIENT_ID;
-const idpId = 'memberspacetest';
+const idpId = 'memberspacetst';
 const rsaPrivateKey = process.env.RSA_PRIVATE_KEY;
 const keyId = process.env.KEY_ID;
 

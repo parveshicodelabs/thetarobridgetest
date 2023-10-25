@@ -15,6 +15,3 @@ build
 .env.*
 npm-debug.log
 yarn-error.log
-
-
-serviceAccountKey.json

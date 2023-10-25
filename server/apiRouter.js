@@ -21,7 +21,7 @@ const createUserWithIdp = require('./api/auth/createUserWithIdp');
 const { authenticateFacebook, authenticateFacebookCallback } = require('./api/auth/facebook');
 const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/google');
 
-const memberspace = require('./api/auth/memberspace');
+const memberspace = require('./api/auth/memberspace')
 
 const router = express.Router();
 

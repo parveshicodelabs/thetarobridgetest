@@ -234,13 +234,13 @@ export const signupWithIdp = params => (dispatch, getState, sdk) => {
     });
 };
 
-export const memberspaceLogin = ({email, firstName, lastName}) => async (dispatch, getState, sdk) => {
+export const memberspaceLogin = (user) => async (dispatch, getState, sdk) => {
   if (authenticationInProgress(getState())) {
     return Promise.reject(new Error('Login or logout already in progress'));
   }
   dispatch(loginRequest());
   try {
-     await loginWithMemberSpace({email, firstName, lastName});
+     await loginWithMemberSpace(user);
      dispatch(loginSuccess());
      dispatch(fetchCurrentUser());
   } catch (e) {

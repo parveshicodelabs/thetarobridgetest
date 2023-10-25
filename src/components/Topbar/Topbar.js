@@ -27,8 +27,9 @@ import SearchIcon from './SearchIcon';
 import TopbarSearchForm from './TopbarSearchForm/TopbarSearchForm';
 import TopbarMobileMenu from './TopbarMobileMenu/TopbarMobileMenu';
 import TopbarDesktop from './TopbarDesktop/TopbarDesktop';
-import { loginWithMemberSpace } from '../../util/api';
 import css from './Topbar.module.css';
+import { useDispatch } from 'react-redux';
+import { memberspaceLogin } from '../../ducks/auth.duck';
 
 const MAX_MOBILE_SCREEN_WIDTH = 768;
 
@@ -83,7 +84,7 @@ class TopbarComponent extends Component {
 
   componentDidMount(){
     const {authInProgress,
-      currentUser,} = this.props;
+      currentUser, dispatch} = this.props;
       if(!authInProgress && !currentUser){
         let loggedIn = false;
         let user = null;
@@ -103,7 +104,7 @@ class TopbarComponent extends Component {
           (async function () {
             try {
               console.log('making request to login with memberspace')
-              await loginWithMemberSpace(user);
+              dispatch(memberspaceLogin(user))
             } catch (error) {
               console.log(error, '!!error');
             }
@@ -393,12 +394,15 @@ const EnhancedTopbar = props => {
   const config = useConfiguration();
   const routeConfiguration = useRouteConfiguration();
   const intl = useIntl();
+  const dispatch = useDispatch();
   console.log(props, '&&topbar&&')
+
   return (
     <TopbarComponent
       config={config}
       routeConfiguration={routeConfiguration}
       intl={intl}
+      dispatch={dispatch}
       {...props}
     />
   );

@@ -7,7 +7,7 @@ const createUserWithIdp = require("./createUserWithIdp");
 const { v4: uuidv4 } = require('uuid');
 
 const idpClientId = process.env.REACT_APP_MEMBERSPACE_CLIENT_ID;
-const idpId = 'memberspace';
+const idpId = process.env.REACT_APP_MEMBERSPACE_IDP_ID;
 const rsaPrivateKey = process.env.RSA_PRIVATE_KEY;
 const keyId = process.env.KEY_ID;
 
@@ -28,70 +28,69 @@ const httpsAgent = new https.Agent({ keepAlive: true });
 const baseUrl = BASE_URL ? { baseUrl: BASE_URL } : {};
 
 
-const loginWithIdp = (user, req, res, idpClientId, idpId)=> {
-    const tokenStore = sharetribeSdk.tokenStore.expressCookieStore({
-        clientId: CLIENT_ID,
-        req,
-        res,
-        secure: USING_SSL,
-      });
+const loginWithIdp = (user, req, res, idpClientId, idpId) => {
+  const tokenStore = sharetribeSdk.tokenStore.expressCookieStore({
+    clientId: CLIENT_ID,
+    req,
+    res,
+    secure: USING_SSL,
+  });
 
-      const sdk = sharetribeSdk.createInstance({
-        transitVerbose: TRANSIT_VERBOSE,
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        httpAgent,
-        httpsAgent,
-        tokenStore,
-        typeHandlers: sdkUtils.typeHandlers,
-        ...baseUrl,
-      });
+  const sdk = sharetribeSdk.createInstance({
+    transitVerbose: TRANSIT_VERBOSE,
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    httpAgent,
+    httpsAgent,
+    tokenStore,
+    typeHandlers: sdkUtils.typeHandlers,
+    ...baseUrl,
+  });
 
-      return sdk
-      .loginWithIdp({
-        idpId,
-        idpClientId,
-        idpToken: user.idpToken,
-      })
-      .then(response => {
-        if (response.status === 200) {
-          res.redirect(`${rootUrl}#`);
-        }
-      })
-      .catch(() => {
-        console.log(
-          'Authenticating with idp failed. User needs to confirm creating sign up in frontend.'
-        );
-
-        //Create user if logged in fails,
-        //login fails because user do not exists.
-        //Call create user with idp
-        createUserWithIdp(req, res);
-      });
+  return sdk
+    .loginWithIdp({
+      idpId,
+      idpClientId,
+      idpToken: user.idpToken,
+    })
+    .then(apiResponse => {
+      const { status, statusText, data } = apiResponse;
+      res
+        .clearCookie('st-authinfo')
+        .status(status)
+        .set('Content-Type', 'application/transit+json')
+        .send(
+          serialize({
+            status,
+            statusText,
+            data,
+          })
+        )
+        .end();
+    })
+    .catch(e => {
+      handleError(res, e);
+    });
 }
 
-
-
 module.exports = async (req, res, next) => {
-    const user = req.body;
-    const userId = uuidv4();
-    const {email, firstName, lastName, } = user;
-    //Step 1: create idp token
-    createIdToken(idpClientId, {...user, emailVerified:true, userId}, { signingAlg: 'RS256', rsaPrivateKey, keyId })
+  const user = req.body;
+  const userId = uuidv4();
+  const { email, firstName, lastName, } = user;
+  //Step 1: create idp token
+  createIdToken(idpClientId, { ...user, emailVerified: true, userId }, { signingAlg: 'RS256', rsaPrivateKey, keyId })
     .then(idpToken => {
       const userData = {
         email,
         firstName,
         lastName,
         idpToken,
-        emailVerified:true,
+        emailVerified: true,
         userId,
       };
       console.log(idpToken, 'idp token created!')
       //Step 2: login with idp
-      req.body.idpToken = idpToken;
-      req.body.idpId = idpId;
       loginWithIdp(userData, req, res, idpClientId, idpId);
     })
     .catch(e => console.error(e));
-};
+}

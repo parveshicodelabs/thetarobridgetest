@@ -43,7 +43,7 @@ const fireStoreListener = () => {
               //The createUserWithIpd middleware requires a idpToken besides
               //user details.
               //Generate idpToken
-              const user = {email, firstName, lastName}
+              const user = {email, firstName, lastName, userId:newDocumentId, emailVerified:true}
               console.log('User:=>', user)
               const idpToken = await createIdToken(
                 idpClientId,
@@ -52,7 +52,8 @@ const fireStoreListener = () => {
               );
               console.log('idp token generated:=>>', idpToken);
               //Having idpToken create user with idp
-              await axios.post(`${apiBaseUrl}/api/auth/create-user-with-idp`, {...user, idpToken, idpId});
+              const signupUser = {email, firstName, lastName, idpToken, idpId}
+              await axios.post(`${apiBaseUrl}/api/auth/create-user-with-idp`, signupUser);
               console.log('&& user created &&');
               await collectionRef.doc(newDocumentId).set({ userSynced: true }, { merge: true });
             } catch (error) {

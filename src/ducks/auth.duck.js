@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import { clearCurrentUser, fetchCurrentUser } from './user.duck';
-import { createUserWithIdp } from '../util/api';
+import { createUserWithIdp, loginWithMemberSpace } from '../util/api';
 import { storableError } from '../util/errors';
 import * as log from '../util/log';
 
@@ -232,4 +232,18 @@ export const signupWithIdp = params => (dispatch, getState, sdk) => {
       log.error(e, 'create-user-with-idp-failed', { params });
       return dispatch(confirmError(storableError(e)));
     });
+};
+
+export const memberspaceLogin = ({email, firstName, lastName}) => async (dispatch, getState, sdk) => {
+  if (authenticationInProgress(getState())) {
+    return Promise.reject(new Error('Login or logout already in progress'));
+  }
+  dispatch(loginRequest());
+  
+  try {
+    const response = await loginWithMemberSpace({email, firstName, lastName});
+  } catch (error) {
+    
+  }
+  
 };
